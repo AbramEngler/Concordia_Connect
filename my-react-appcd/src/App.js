@@ -4,7 +4,7 @@ import axios from 'axios';
 function App() {  
   const [users, setUsers] = useState([]);  
   useEffect(() => {    
-    axios.get('http://localhost:5000/users')      
+    axios.get('http://localhost:5000/users') //url       
     .then(res => setUsers(res.data))
     .catch(err => console.error(err));
     }, []);  

@@ -28,3 +28,38 @@ app.get('/users', async (req, res) => {
         res.status(500).json({ error: err.message });  
     }
 });// ... (other routes for adding, updating, deleting data)
+
+//Use an HTTP post request to insert a new user object into the user table
+//API endpoint
+app.post('/newuser', async (req, res) => //accepting post requests. Takes an HTTP request as a parameter
+{
+    try
+    {
+        var obj = req.body; //incoming user object (JSON)
+        const user = new User(obj); //this is coming from User.js, trying to translate into the schema we made
+        //? means it is possible to be null
+        //backend validation
+        if(user.name === null || user.password === null || user.email === null)
+        {
+            res.status(400).json(
+                {
+                    error: "invalid inputs"
+                }
+            )
+            
+        }
+        else{
+            await user.save(); //save the model into MongoDB
+            res.json({
+            message: "OK"
+        });
+        
+    }
+}
+    catch(err)
+    {
+        req.status(500).json({
+            error: err
+        });
+    }
+}) 

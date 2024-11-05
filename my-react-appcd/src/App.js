@@ -1,18 +1,24 @@
-// client/src/App.js
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-function App() {  
-  const [users, setUsers] = useState([]);  
-  useEffect(() => {    
-    axios.get('http://localhost:5000/users') //url       
-    .then(res => setUsers(res.data))
-    .catch(err => console.error(err));
-    }, []);  
+import { Routes, Route } from 'react-router-dom';
+import NavBar from './Components/NavBar';
+import NoMatch from "./Components/NoMatch";
+import Home from './Pages/Home';
+import Users from './Pages/Users';
+import About from './Pages/About';
+import NewUserForm from './Pages/NewUserForm';
+
+const App = () =>{
   return (
-    <div>
-      {/* Display the fetched users */}
-      {users.map(user => <p key={user._id}><span>{user.name}</span>-<span>{user.email}</span></p>)}
-      </div>  
-      );
-}
+    <>
+    <NavBar/>
+      <Routes> 
+        <Route path="/" element={<Home />}/> 
+        <Route path="/users" element={<Users />}/>
+        <Route path ="/about" element={<About />}/>
+        <Route path = "*" element = {<NoMatch />}/>
+        <Route path="/newuser" element={<NewUserForm />}/>
+      </Routes>
+    </>
+  );
+};
+
 export default App;

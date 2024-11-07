@@ -8,7 +8,7 @@ const NavBar = () => {
 				<div class="container-fluid">
 					<div class="navbar-brand">
 						<a href="/">
-							<h1>React Demo</h1>
+							<h1>ConcordiaConnect</h1>
 						</a>
 					</div>
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0">

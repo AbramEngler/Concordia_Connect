@@ -38,7 +38,7 @@ app.get('/users', async (req, res) => {
 });// ... (other routes for adding, updating, deleting data)
 
 const loginRouter = require('./models/login');
-app.use(loginRouter); // Register the router with the app instance
+//app.use(loginRouter); // Register the router with the app instance
 
 //Use an HTTP post request to insert a new user object into the user table
 //API endpoint
@@ -97,15 +97,20 @@ app.post('/newuser', async (req, res) => //accepting post requests. Takes an HTT
 // });
 
 //Login
-router.post('/login', async (req, res) => {
+app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-
+    console.log(email)
     try {
         const user = await User.findOne({ email });
         if (!user) return res.status(400).send('User not found');
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) return res.status(400).send('Invalid password');
+        if (!isPasswordValid) return res.status(400).send(
+            { message: 'Invalid password',
+                password: password,
+                crypted: user.password
+            }
+            );
 
         const token = jwt.sign({ id: user._id }, 'your_jwt_secret');
         res.send({ token });

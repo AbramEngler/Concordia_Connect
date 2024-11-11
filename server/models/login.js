@@ -13,7 +13,8 @@ router.post('/login', async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) return res.status(400).json({ error: 'User not found' });
 
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+        //const isPasswordValid = await bcrypt.compare(password, user.password);
+        const isPasswordValid = compare(password, user.password);
         if (!isPasswordValid) return res.status(400).json({ error: 'Invalid password' });
 
         const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' });

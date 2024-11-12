@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
 
@@ -6,6 +7,9 @@ const Login = () => {
     const [email, setEmail] = useState(''); // Email state
     const [password, setPassword] = useState(''); // Password state
     const [loginStatus, setLoginStatus] = useState(''); // Login status state
+    const [userName, setUserName] = useState(''); // To store the user's name
+    const [userId, setUserId] = useState(''); // To store the user's ID
+    const navigate = useNavigate(); // To handle redirection
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,8 +23,16 @@ const Login = () => {
             const data = await response.json();
             if (response.ok) {
                 localStorage.setItem('token', data.token);
+                localStorage.setItem('userName', data.userName); //update user's name
+                localStorage.setItem('userId', data.userId); //update user's id
+                console.log(userName)
+                console.log(localStorage.getItem('userId'))
                 setLoginStatus('Login successful!'); // Update loginStatus on success
+
                 // Optionally navigate to the user dashboard or main app here
+                setTimeout(() => {
+                navigate('/'); // Replace with your homepage route
+                }, 1000);
             } else {
                 setLoginStatus('Login failed. Please check your credentials.');
             }

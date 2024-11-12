@@ -6,6 +6,7 @@ import Users from './Pages/Users';
 import About from './Pages/About';
 import NewUserForm from './Pages/NewUserForm';
 import Login from './Pages/Login';
+import BuyAndSell from './Pages/BuyAndSell';
 
 const App = () =>{
   return (
@@ -18,6 +19,7 @@ const App = () =>{
         <Route path = "*" element = {<NoMatch />}/>
         <Route path="/newuser" element={<NewUserForm />}/>
         <Route path="/login" element={<Login />}/>
+        <Route path="/buyandsell" element={<BuyAndSell />}/>
       </Routes>
     </>
   );

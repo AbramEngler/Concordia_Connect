@@ -11,6 +11,8 @@ const jwt = require('jsonwebtoken');
 //const User = require('./models/user');
 const router = express.Router();
 
+//Posts
+const Post = require('./models/post');
 
 app.use(cors());app.use(bodyParser.json());// MongoDB connection
 mongoose.connect('mongodb://localhost:27017/myreactdemo', {       useNewUrlParser: true,   useUnifiedTopology: true })  
@@ -105,7 +107,7 @@ app.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({ email });
         if (!user) return res.status(400).send('User not found');
-        console.log(password);
+        console.log(user.email);
         console.log(user.password);
 
         // const saltRounds = 10;
@@ -120,10 +122,40 @@ app.post('/login', async (req, res) => {
             );
 
         const token = jwt.sign({ id: user._id }, 'your_jwt_secret');
-        res.send({ token });
+        res.send({ token, userName: user.name, userId: user._id  });
     } catch (error) {
         res.status(500).send('Error logging in');
     }
 });
 
+//BuyAndSell
+
+app.post('/post', async (req, res) => {
+    const { title, body, authorId, authorName } = req.body;
+
+    if (!title || !body || !authorId || !authorName) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    try {
+        const newPost = new Post({ title, body, authorId, authorName });
+        await newPost.save();  // Save the post to MongoDB
+
+        res.status(200).json({ message: 'Post created successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to save post' });
+    }
+});
+
 module.exports = router;
+
+// GET endpoint to retrieve all posts
+app.get('/posts', async (req, res) => {
+    try {
+        const posts = await Post.find(); // Fetch all posts from the database
+        res.json(posts);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch posts' });
+    }
+});

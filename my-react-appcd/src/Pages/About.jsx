@@ -12,10 +12,10 @@ const About = () => {
 			</div>
 			<div className="about-container">
 				<p>
-					This is the first react demo of CSC3070 Software Engineering.
+					This is our about page for ConcordiaConnect
 				</p>
 				<p>
-					It is 11/5/2024
+					We want to be able to post messages next
 				</p>
 			</div>
 		</div>

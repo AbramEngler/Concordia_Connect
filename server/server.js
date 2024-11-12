@@ -44,58 +44,58 @@ const loginRouter = require('./models/login');
 //API endpoint
 
 //New User Creation
-// app.post('/newuser', async (req, res) => //accepting post requests. Takes an HTTP request as a parameter
-// {
-//     try
-//     {
-//         var obj = req.body; //incoming user object (JSON)
-//         const user = new User(obj); //this is coming from User.js, trying to translate into the schema we made
-//         //? means it is possible to be null
-//         //backend validation
-//         if(user.name === null || user.password === null || user.email === null)
-//         {
-//             res.status(400).json(
-//                 {
-//                     error: "invalid inputs"
-//                 }
-//             )
+app.post('/newuser', async (req, res) => //accepting post requests. Takes an HTTP request as a parameter
+{
+    try
+    {
+        var obj = req.body; //incoming user object (JSON)
+        const user = new User(obj); //this is coming from User.js, trying to translate into the schema we made
+        //? means it is possible to be null
+        //backend validation
+        if(user.name === null || user.password === null || user.email === null)
+        {
+            res.status(400).json(
+                {
+                    error: "invalid inputs"
+                }
+            )
             
-//         }
-//         else{
-//             await user.save(); //save the model into MongoDB
-//             res.json({
-//             message: "OK"
-//         });
-        
-//     }
-// }
-//     catch(err)
-//     {
-//         req.status(500).json({
-//             error: err
-//         });
-//     }
-// }) 
-
-app.post('/newuser', async (req, res) => {
-    try {
-        const { name, email, password } = req.body;
-
-        if (!name || !email || !password) {
-            return res.status(400).json({ error: 'Invalid inputs' });
         }
-
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-    
-        const user = new User({ name, email, password: hashedPassword });
-
-        await user.save();
-        res.json({ message: 'User created successfully' });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        else{
+            await user.save(); //save the model into MongoDB
+            res.json({
+            message: "OK"
+        });
+        
     }
-});
+}
+    catch(err)
+    {
+        req.status(500).json({
+            error: err
+        });
+    }
+}) 
+
+// app.post('/newuser', async (req, res) => {
+//     try {
+//         const { name, email, password } = req.body;
+
+//         if (!name || !email || !password) {
+//             return res.status(400).json({ error: 'Invalid inputs' });
+//         }
+
+//         const saltRounds = 10;
+//         const hashedPassword = await bcrypt.hash(password, saltRounds);
+    
+//         const user = new User({ name, email, password: hashedPassword });
+
+//         await user.save();
+//         res.json({ message: 'User created successfully' });
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// });
 
 //Login
 app.post('/login', async (req, res) => {

@@ -1,7 +1,20 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const NavBar = () => {
+	const navigate = useNavigate();
+
+    const handleLogout = () => {
+        // Clear user data from local storage
+        localStorage.removeItem('token');
+        localStorage.removeItem('userName');
+
+        // Redirect to login page or home page
+        setTimeout(() => {
+			navigate('/login'); // Replace with your homepage route
+			}, 1000);
+    };
+
 	return (
 		<div>
 			<nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -27,6 +40,9 @@ const NavBar = () => {
 						<li class="nav-item">
 							<NavLink class="nav-link" to="/login">Login</NavLink>
 						</li>
+						<li className="nav-item">
+                            <NavLink class="nav-link" onClick={handleLogout}>Logout</NavLink>
+                        </li>
 						<li class="nav-item">
     						<NavLink class="nav-link" to="/buyandsell">Buy&Sell</NavLink>
 						</li>

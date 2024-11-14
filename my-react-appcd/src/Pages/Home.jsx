@@ -8,7 +8,7 @@ const Home = () => {
 		<div className="container">
 			<div className="banner-container">
 				<div className="banner">
-					<h2>Welcome, {userName}!</h2>
+					<h2>Welcome {userName}!</h2>
 					{/* <Link to="/users">
 						<div className="btn">Check all users</div>
 					</Link> */}

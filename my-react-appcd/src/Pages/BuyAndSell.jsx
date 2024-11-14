@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 
 const BuyAndSell = () => {
@@ -7,6 +8,7 @@ const BuyAndSell = () => {
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
     const [postStatus, setPostStatus] = useState('');
+    
 
     // const userName = localStorage.getItem('userName'); //retrieve User name
     // const userId = localStorage.getItem('userId'); // Assuming you save user ID on login, retrieve userID
@@ -87,10 +89,14 @@ const BuyAndSell = () => {
             <div>
                 {posts.map((post) => (
                     <div key={post._id}>
-                        <h3>{post.title}</h3>
-                        <p>{post.body}</p>
-                        <p>Posted by: {post.authorName}</p>
-                    </div>
+                    <h2>
+                        <Link to={`/post/${post._id}`}>{post.title}</Link>
+                    </h2>
+                    <p>{post.body}</p>
+                    <p>Author: {post.authorName}</p>
+                    <p>Date: {new Date(post.createdAt).toLocaleString()}</p>
+                    <p>Replies: {post.replies?.length || 0}</p> {/* Use optional chaining for replies */}
+                </div>
                 ))}
             </div>
         </div>

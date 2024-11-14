@@ -14,6 +14,8 @@ const router = express.Router();
 //Posts
 const Post = require('./models/post');
 
+//Replies
+
 app.use(cors());app.use(bodyParser.json());// MongoDB connection
 mongoose.connect('mongodb://localhost:27017/myreactdemo', {       useNewUrlParser: true,   useUnifiedTopology: true })  
 .then(() => console.log('Connected to MongoDB'))  //promise, will let your know when it happens
@@ -145,6 +147,34 @@ app.post('/post', async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to save post' });
+    }
+});
+
+//GET a specific post with its replies
+app.get('/post/:postId', async (req, res) => {
+    console.log('Fetching post with ID:', req.params.postId);
+    try {
+        const post = await Post.findById(req.params.postId);
+        res.json(post);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+//POST to handle adding replies
+app.post('/post/:postId/reply', async (req, res) => {
+    const { body, authorId, authorName } = req.body;
+    
+    try {
+        const post = await Post.findById(req.params.postId);
+        if (!post) return res.status(404).send('Post not found');
+
+        post.replies.push({ body, authorId, authorName });
+        await post.save();
+
+        res.json({ message: 'Reply added successfully', post });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 });
 

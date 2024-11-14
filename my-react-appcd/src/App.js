@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+
 import NavBar from './Components/NavBar';
 import NoMatch from "./Components/NoMatch";
 import Home from './Pages/Home';
@@ -7,6 +8,7 @@ import About from './Pages/About';
 import NewUserForm from './Pages/NewUserForm';
 import Login from './Pages/Login';
 import BuyAndSell from './Pages/BuyAndSell';
+import PostDetail from './Pages/PostDetail';
 
 const App = () =>{
   return (
@@ -20,6 +22,7 @@ const App = () =>{
         <Route path="/newuser" element={<NewUserForm />}/>
         <Route path="/login" element={<Login />}/>
         <Route path="/buyandsell" element={<BuyAndSell />}/>
+        <Route path="/post/:postId" element={<PostDetail />} />
       </Routes>
     </>
   );

@@ -9,8 +9,10 @@ import NewUserForm from './Pages/NewUserForm';
 import Login from './Pages/Login';
 import BuyAndSell from './Pages/BuyAndSell';
 import PostDetail from './Pages/PostDetail';
+import MessagePage from './Pages/MessagePage'; 
 
 const App = () =>{
+  const userId = localStorage.getItem('userId'); // Get userId from localStorage
   return (
     <>
     <NavBar/>
@@ -23,6 +25,7 @@ const App = () =>{
         <Route path="/login" element={<Login />}/>
         <Route path="/buyandsell" element={<BuyAndSell />}/>
         <Route path="/post/:postId" element={<PostDetail />} />
+        <Route path="/messagepage" element={<MessagePage userId={userId} />} />
       </Routes>
     </>
   );

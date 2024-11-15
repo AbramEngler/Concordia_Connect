@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate  } from 'react-router-dom';
 // import { NavLink, useNavigate } from 'react-router-dom';
 // import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -9,6 +9,9 @@ const PostDetail = () => {
     const [post, setPost] = useState(null);
     const [replyBody, setReplyBody] = useState('');
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    //const isLoggedIn = localStorage.getItem('userId') && localStorage.getItem('token');
 
     useEffect(() => {
         console.log("Fetching post with ID:", postId);
@@ -27,8 +30,14 @@ const PostDetail = () => {
 
     const handleReplySubmit = async (e) => {
         e.preventDefault();
+        
         const authorId = localStorage.getItem('userId'); // Assuming you have stored the user's ID in localStorage
         const authorName = localStorage.getItem('userName');
+
+        if (!authorId || !authorName) {
+            setError("Failed to submit the post. Please log in.");
+            return;
+        }
 
         axios.post(`http://localhost:5000/post/${postId}/reply`, {
             body: replyBody,

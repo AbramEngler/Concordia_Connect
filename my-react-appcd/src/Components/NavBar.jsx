@@ -46,6 +46,9 @@ const NavBar = () => {
 						<li class="nav-item">
     						<NavLink class="nav-link" to="/buyandsell">Buy&Sell</NavLink>
 						</li>
+						<li class="nav-item">
+    						<NavLink class="nav-link" to="/messagepage">Messages</NavLink>
+						</li>
 					</ul>
 				</div>
 			</nav>

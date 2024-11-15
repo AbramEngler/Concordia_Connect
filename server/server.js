@@ -14,7 +14,8 @@ const router = express.Router();
 //Posts
 const Post = require('./models/post');
 
-//Replies
+//Direct Messaging
+const Message = require('./models/message');
 
 app.use(cors());app.use(bodyParser.json());// MongoDB connection
 mongoose.connect('mongodb://localhost:27017/myreactdemo', {       useNewUrlParser: true,   useUnifiedTopology: true })  
@@ -189,3 +190,67 @@ app.get('/posts', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch posts' });
     }
 });
+
+
+// Get messages for a user (either sent or received)
+app.get('/messages/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    // Find all messages where the user is either the sender or receiver
+    const messages = await Message.find({
+      $or: [
+        { senderId: userId },
+        { receiverId: userId }
+      ]
+    })
+      .populate('senderId', 'name') // Populate sender's name
+      .populate('receiverId', 'name') // Populate receiver's name
+      .sort({ createdAt: -1 }); // Sort by most recent message
+
+    // Return only messages relevant to the logged-in user
+    res.status(200).json(messages);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching messages' });
+  }
+});
+
+//send messages
+app.post('/message', async (req, res) => {
+    const { senderId, receiverId, senderName, receiverName, body } = req.body;
+    try {
+      // Create a new message
+      const newMessage = new Message({
+        senderId,
+        receiverId,
+        senderName,
+        receiverName,
+        body,
+      });
+  
+      await newMessage.save();
+      res.status(200).send({ message: 'Message sent successfully' });
+    } catch (err) {
+      res.status(500).json({ error: 'Error sending message' });
+    }
+  });
+
+  // Get messages for a user
+app.get('/messages/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    try {
+      // Find all messages where the user is either the sender or receiver
+      const messages = await Message.find({
+        $or: [
+          { senderId: userId },
+          { receiverId: userId },
+        ],
+      })
+        .populate('senderId', 'name') // Populate sender's name
+        .populate('receiverId', 'name') // Populate receiver's name
+        .sort({ createdAt: -1 }); // Sort by most recent message
+  
+      res.status(200).json(messages);
+    } catch (err) {
+      res.status(500).json({ error: 'Error fetching messages' });
+    }
+  });

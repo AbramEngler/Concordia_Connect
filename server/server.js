@@ -227,8 +227,9 @@ app.post('/message', async (req, res) => {
         body,
       });
   
-      await newMessage.save();
-      res.status(200).send({ message: 'Message sent successfully' });
+      const savedMessage = await newMessage.save();
+      res.status(201).json(savedMessage);
+      //res.status(200).send({ message: 'Message sent successfully' });
     } catch (err) {
       res.status(500).json({ error: 'Error sending message' });
     }
@@ -254,3 +255,84 @@ app.get('/messages/:userId', async (req, res) => {
       res.status(500).json({ error: 'Error fetching messages' });
     }
   });
+
+  //search for users to send message to
+  app.get('/users/search', async (req, res) => {
+    const query = req.query.query;
+    if (!query) return res.status(400).json({ error: 'Query parameter is required' });
+
+    try {
+        const users = await User.find({ name: { $regex: query, $options: 'i' } }).select('_id name');
+        res.json(users);
+    } catch (err) {
+        console.error('Error fetching users:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+//adding replies
+app.post('/message/:messageId/reply', async (req, res) => {
+    const { messageId } = req.params;
+    const { senderId, senderName, body } = req.body;
+
+    try {
+        const message = await Message.findById(messageId);
+
+        if (!message) {
+            return res.status(404).json({ error: 'Message not found' });
+        }
+
+        const reply = { senderId, senderName, body };
+        message.replies.push(reply);
+        await message.save();
+
+        res.status(201).json(reply);
+    } catch (err) {
+        console.error('Error adding reply:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+//mark message as read
+app.patch('/message/:messageId/read', async (req, res) => {
+    const { messageId } = req.params;
+
+    try {
+        const message = await Message.findByIdAndUpdate(
+            messageId,
+            { status: 'read' },
+            { new: true }
+        );
+
+        if (!message) {
+            return res.status(404).json({ error: 'Message not found' });
+        }
+
+        res.status(200).json(message);
+    } catch (err) {
+        console.error('Error marking message as read:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+//open message
+// Fetch a specific message by its ID
+app.get('/message/:messageId', async (req, res) => {
+    try {
+        const { messageId } = req.params; // Extract messageId from the URL
+        const message = await Message.findById(messageId); // Fetch the message from MongoDB
+
+        if (!message) {
+            return res.status(404).json({ error: 'Message not found' });
+        }
+
+        // Update the message status to "read" when accessed
+        message.status = 'read';
+        await message.save();
+
+        res.json(message);
+    } catch (err) {
+        console.error('Error fetching message:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});

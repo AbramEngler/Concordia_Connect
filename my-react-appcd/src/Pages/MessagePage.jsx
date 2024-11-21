@@ -10,6 +10,8 @@ const MessagePage = ({ userId }) => {
     const [selectedUser, setSelectedUser] = useState(null);
     const [error, setError] = useState('');
 
+
+    //console.log(message.repliesCount);
     // Fetch messages for the logged-in user
     useEffect(() => {
         const fetchMessages = async () => {
@@ -17,6 +19,7 @@ const MessagePage = ({ userId }) => {
                 const userId = localStorage.getItem('userId'); // Get the logged-in user's ID
                 const response = await axios.get(`http://localhost:5000/messages/${userId}`);
                 setMessages(response.data);
+                
             } catch (err) {
                 setError('Error fetching messages');
             }
@@ -87,6 +90,7 @@ const MessagePage = ({ userId }) => {
                           </p>
                         </Link>
                         <p>{message.body}</p>
+                        <p><strong>Replies:</strong> {message.repliesCount || 0} replies</p>
                         <p>Status: {message.status}</p>
                         <p>Date: {new Date(message.createdAt).toLocaleString()}</p>
                     </div>

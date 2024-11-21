@@ -236,25 +236,33 @@ app.post('/message', async (req, res) => {
   });
 
   // Get messages for a user
-app.get('/messages/:userId', async (req, res) => {
+  app.get('/messages/:userId', async (req, res) => {
     const userId = req.params.userId;
+
     try {
-      // Find all messages where the user is either the sender or receiver
-      const messages = await Message.find({
-        $or: [
-          { senderId: userId },
-          { receiverId: userId },
-        ],
-      })
-        .populate('senderId', 'name') // Populate sender's name
-        .populate('receiverId', 'name') // Populate receiver's name
-        .sort({ createdAt: -1 }); // Sort by most recent message
-  
-      res.status(200).json(messages);
+        // Find all messages where the user is either the sender or receiver
+        const messages = await Message.find({
+            $or: [
+                { senderId: userId },
+                { receiverId: userId },
+            ],
+        })
+            .populate('senderId', 'name') // Populate sender's name
+            .populate('receiverId', 'name') // Populate receiver's name
+            .sort({ createdAt: -1 }) // Sort by most recent message
+            .lean(); // Convert documents to plain JavaScript objects
+
+        // Add repliesCount to each message (fallback to 0 if undefined)
+        const messagesWithRepliesCount = messages.map((message) => ({
+            ...message,
+            repliesCount: message.replies ? message.replies.length : 0,
+        }));
+
+        res.status(200).json(messagesWithRepliesCount);
     } catch (err) {
-      res.status(500).json({ error: 'Error fetching messages' });
+        res.status(500).json({ error: 'Error fetching messages' });
     }
-  });
+});
 
   //search for users to send message to
   app.get('/users/search', async (req, res) => {

@@ -32,7 +32,8 @@ const MessageDetail = () => {
                 senderName: localStorage.getItem('userName'), // Assuming userName is stored in localStorage
                 body: replyBody,
             });
-            setReplies((prevReplies) => [...prevReplies, response.data]); // Update replies list
+            
+            setReplies((prevReplies) => [...prevReplies, response.data,]); // Update replies list
             setReplyBody(''); // Clear input field
         } catch (err) {
             console.error('Error adding reply:', err);

@@ -10,8 +10,6 @@ const MessagePage = ({ userId }) => {
     const [selectedUser, setSelectedUser] = useState(null);
     const [error, setError] = useState('');
 
-
-    //console.log(message.repliesCount);
     // Fetch messages for the logged-in user
     useEffect(() => {
         const fetchMessages = async () => {
@@ -19,7 +17,6 @@ const MessagePage = ({ userId }) => {
                 const userId = localStorage.getItem('userId'); // Get the logged-in user's ID
                 const response = await axios.get(`http://localhost:5000/messages/${userId}`);
                 setMessages(response.data);
-                
             } catch (err) {
                 setError('Error fetching messages');
             }
@@ -57,7 +54,6 @@ const MessagePage = ({ userId }) => {
         const senderName = localStorage.getItem('userName'); // Assuming this is saved during login
 
         try {
-            // Send the message to the backend
             const response = await axios.post('http://localhost:5000/message', {
                 senderId: userId,
                 receiverId: selectedUser._id,
@@ -66,14 +62,28 @@ const MessagePage = ({ userId }) => {
                 body: messageContent,
             });
 
-            // Add the new message to the messages list
-            setMessages([...messages, response.data]);
+            setMessages([...messages, response.data]); // Add the new message to the list
             setMessageContent(''); // Clear the message input
             setSelectedUser(null); // Clear selected recipient
             setSearchQuery(''); // Clear search bar
             setSuggestedUsers([]); // Clear suggestions
         } catch (err) {
             setError('Error sending message');
+        }
+    };
+
+    // Handle message delete (user-specific)
+    const handleDeleteMessage = async (messageId) => {
+        try {
+            const userId = localStorage.getItem('userId');
+            await axios.delete(`http://localhost:5000/message/${messageId}`, {
+                data: { userId },
+            });
+
+            // Update the messages list to reflect the deletion
+            setMessages(messages.filter((message) => message._id !== messageId));
+        } catch (err) {
+            setError('Error deleting message.');
         }
     };
 
@@ -85,14 +95,20 @@ const MessagePage = ({ userId }) => {
                 {messages.map((message, index) => (
                     <div key={index}>
                         <Link to={`/message/${message._id}`}>
-                          <p>
-                            <strong>{message.senderName}</strong> to <strong>{message.receiverName}</strong>
-                          </p>
+                            <p>
+                                <strong>{message.senderName}</strong> to <strong>{message.receiverName}</strong>
+                            </p>
                         </Link>
                         <p>{message.body}</p>
-                        <p><strong>Replies:</strong> {message.repliesCount || 0} replies</p>
+                        <p><strong>Replies:</strong> {message.replies?.length || 0} replies</p>
                         <p>Status: {message.status}</p>
                         <p>Date: {new Date(message.createdAt).toLocaleString()}</p>
+                        <button
+                            onClick={() => handleDeleteMessage(message._id)}
+                            style={{ color: 'red', cursor: 'pointer' }}
+                        >
+                            Delete
+                        </button>
                     </div>
                 ))}
             </div>
@@ -138,7 +154,5 @@ const MessagePage = ({ userId }) => {
         </div>
     );
 };
-
-
 
 export default MessagePage;

@@ -194,24 +194,26 @@ app.get('/posts', async (req, res) => {
 
 // Get messages for a user (either sent or received)
 app.get('/messages/:userId', async (req, res) => {
-  const userId = req.params.userId;
-  try {
-    // Find all messages where the user is either the sender or receiver
-    const messages = await Message.find({
-      $or: [
-        { senderId: userId },
-        { receiverId: userId }
-      ]
-    })
-      .populate('senderId', 'name') // Populate sender's name
-      .populate('receiverId', 'name') // Populate receiver's name
-      .sort({ createdAt: -1 }); // Sort by most recent message
+    const userId = req.params.userId;
 
-    // Return only messages relevant to the logged-in user
-    res.status(200).json(messages);
-  } catch (err) {
-    res.status(500).json({ error: 'Error fetching messages' });
-  }
+    try {
+        // Find the user and their deleted messages
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+        // Fetch messages excluding the deleted ones
+        const messages = await Message.find({
+            $or: [{ senderId: userId }, { receiverId: userId }],
+            _id: { $nin: user.deletedMessages } // Exclude deleted messages
+        })
+        .populate('senderId', 'name')
+        .populate('receiverId', 'name')
+        .sort({ createdAt: -1 });
+
+        res.status(200).json(messages);
+    } catch (err) {
+        res.status(500).json({ error: 'Error fetching messages' });
+    }
 });
 
 //send messages
@@ -234,6 +236,28 @@ app.post('/message', async (req, res) => {
       res.status(500).json({ error: 'Error sending message' });
     }
   });
+
+  //Delete messages Endpoint
+  app.delete('/message/:messageId', async (req, res) => {
+    const { messageId } = req.params;
+    const { userId } = req.body; // Pass the user's ID in the request body
+
+    try {
+        // Find the user
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+        // Add the message ID to the deletedMessages array if not already present
+        if (!user.deletedMessages.includes(messageId)) {
+            user.deletedMessages.push(messageId);
+            await user.save();
+        }
+
+        res.status(200).json({ message: 'Message deleted for the user' });
+    } catch (err) {
+        res.status(500).json({ error: 'Error deleting message' });
+    }
+});
 
   // Get messages for a user
   app.get('/messages/:userId', async (req, res) => {

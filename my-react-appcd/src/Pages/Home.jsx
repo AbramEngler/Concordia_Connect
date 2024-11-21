@@ -12,6 +12,10 @@ const Home = () => {
 					{/* <Link to="/users">
 						<div className="btn">Check all users</div>
 					</Link> */}
+					<Link to={`/buyandsell/`}>
+						<h2>Buy&Sell!</h2>
+					</Link>
+					<p>Your one stop shop for all your marketplace needs on campus!</p>
 				</div>
 			</div>
 		</div>

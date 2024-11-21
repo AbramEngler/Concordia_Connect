@@ -11,6 +11,10 @@ import BuyAndSell from './Pages/BuyAndSell';
 import PostDetail from './Pages/PostDetail';
 import MessagePage from './Pages/MessagePage'; 
 import MessageDetail from './Pages/MessageDetail';
+import UserDirectoryReal from './Pages/UserDirectoryReal';
+// import UserProfile from './Pages/UserProfile';
+// import UserDirectory from './Pages/UserDirectory';
+
 
 const App = () =>{
   const userId = localStorage.getItem('userId'); // Get userId from localStorage
@@ -28,6 +32,9 @@ const App = () =>{
         <Route path="/post/:postId" element={<PostDetail />} />
         <Route path="/messagepage" element={<MessagePage userId={userId} />} />
         <Route path="/message/:messageId" element={<MessageDetail />} />
+        <Route path="/userdirectory" element={<UserDirectoryReal />}/>
+        {/* <Route path="/profile-directory" element={<UserDirectory />} />
+        <Route path="/profile/:userId" element={<UserProfile />} />  */}
       </Routes>
     </>
   );

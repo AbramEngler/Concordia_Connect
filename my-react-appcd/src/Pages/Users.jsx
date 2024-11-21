@@ -12,12 +12,8 @@ function Users() {
   return (
     <>
     <div>
-      <Link to="/newuser"> Create a new user </Link>
+      <Link to="/newuser"> <h1>Register a New Account</h1> </Link>
     </div>
-    <div>
-      {/* Display the fetched users */}
-      {users.map(user => <p key={user._id}><span>{user.name}</span>-<span>{user.email}</span></p>)}
-      </div>  
     </>
       );
 }

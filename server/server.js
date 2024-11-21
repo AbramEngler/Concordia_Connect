@@ -17,6 +17,8 @@ const Post = require('./models/post');
 //Direct Messaging
 const Message = require('./models/message');
 
+//User Profile
+
 app.use(cors());app.use(bodyParser.json());// MongoDB connection
 mongoose.connect('mongodb://localhost:27017/myreactdemo', {       useNewUrlParser: true,   useUnifiedTopology: true })  
 .then(() => console.log('Connected to MongoDB'))  //promise, will let your know when it happens
@@ -368,3 +370,43 @@ app.get('/message/:messageId', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
+// //Fetch user profile
+// app.get('/users/:id', async (req, res) => {
+//     try {
+//         const user = await User.findById(req.params.id).select('name email bio schoolYear');
+//         if (!user) return res.status(404).json({ error: 'User not found' });
+//         res.json(user);
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// });
+
+// //Update user profile
+// app.put('/users/:id', async (req, res) => {
+//     const { bio, schoolYear } = req.body;
+//     try {
+//         const user = await User.findByIdAndUpdate(
+//             req.params.id,
+//             { bio, schoolYear },
+//             { new: true }
+//         ).select('name email bio schoolYear');
+//         if (!user) return res.status(404).json({ error: 'User not found' });
+//         res.json(user);
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// });
+
+// //Fetch all users for directory
+// app.get('/users', async (req, res) => {
+//     const query = req.query.search || '';
+//     try {
+//         const users = await User.find({
+//             name: { $regex: query, $options: 'i' }
+//         }).sort('name').select('_id name email');
+//         res.json(users);
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// });

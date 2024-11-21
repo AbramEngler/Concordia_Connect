@@ -1,0 +1,36 @@
+/* General styling for the navbar */
+.navbar {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.brand-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff; /* Adjust to match your theme */
+    text-decoration: none;
+}
+
+/* Adjust nav-link styles */
+.nav-link {
+    color: #555;
+    font-size: 1rem;
+    margin: 0 10px;
+    text-transform: capitalize;
+}
+
+.nav-link:hover {
+    color: #007bff;
+}
+
+/* Logout button style */
+.nav-btn {
+    border: none;
+    font-size: 0.9rem;
+    padding: 5px 10px;
+    margin: 0 10px;
+}
+
+/* Responsive alignment */
+.navbar-toggler {
+    border: none;
+}

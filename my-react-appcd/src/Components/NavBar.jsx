@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import './NavBar.css'; // For custom styles
+import './NavBar.css'; 
 
 const NavBar = () => {
     const navigate = useNavigate();
@@ -11,9 +11,9 @@ const NavBar = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userName');
 
-        // Redirect to login page or home page
+        window.location.reload();
         setTimeout(() => {
-            navigate('/'); // Replace with your login route
+            navigate('/'); 
         }, 1000);
     };
 

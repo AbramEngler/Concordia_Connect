@@ -1,9 +1,12 @@
-//add to /src/Pages/NewUserForm.jsx
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+import './NewUserForm.css'; // Import custom styles
 
 const NewUserForm = () => {
-    const [formData, setFormData] = useState({ //formData is created here
+    const navigate = useNavigate();
+
+    const [formData, setFormData] = useState({
         name: "",
         email: "",
         password: "",
@@ -22,52 +25,65 @@ const NewUserForm = () => {
         try {
             const response = await axios.post(
                 "http://localhost:5000/newuser",
-                formData //send formData to API
+                formData
             );
             console.log(response);
-            alert("Form Submitted")
+            alert("Successfully Registered!");
+            setTimeout(() => {
+                navigate('/login');
+            }, 1000);
         } catch (error) {
             console.error(error);
+            alert("Registration failed. Please try again.");
         }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <p>
-                <label htmlFor="name">Name</label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    placeholder="type in name"
-                    value={formData.name}
-                    onChange={handleChange} //makes formData always up to date
-                />
-            </p>
-            <p>
-                <label htmlFor="email">Email</label>
-                <input
-                    type="text"
-                    id="email"
-                    name="email"
-                    placeholder="type in email"
-                    value={formData.email}
-                    onChange={handleChange}
-                />
-            </p>
-            <p>
-                <label htmlFor="password">Password</label>
-                <input
-                    type="text"
-                    id="password"
-                    name="password"
-                    placeholder="type in password"
-                    value={formData.password}
-                    onChange={handleChange}
-                />
-            </p>
-            <button type="submit">Submit</button>
-        </form>
+        <div className="new-user-form container">
+            <h2 className="text-center mb-4">Create Your Account</h2>
+            <form onSubmit={handleSubmit} className="card p-4 shadow">
+                <div className="mb-3">
+                    <label htmlFor="name" className="form-label">Name</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="email" className="form-label">Email</label>
+                    <input
+                        type="email"
+                        className="form-control"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="password" className="form-label">Password</label>
+                    <input
+                        type="password"
+                        className="form-control"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <button type="submit" className="btn btn-primary w-100">Register</button>
+            </form>
+        </div>
     );
 };
 

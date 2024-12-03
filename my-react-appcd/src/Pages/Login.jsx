@@ -1,70 +1,79 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from "axios";
-
+import './Login.css';
 
 const Login = () => {
-    const [email, setEmail] = useState(''); // Email state
-    const [password, setPassword] = useState(''); // Password state
-    const [loginStatus, setLoginStatus] = useState(''); // Login status state
-    const [userName, setUserName] = useState(''); // To store the user's name
-    const [userId, setUserId] = useState(''); // To store the user's ID
-    const navigate = useNavigate(); // To handle redirection
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [loginStatus, setLoginStatus] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log(email, password);
             const response = await fetch('http://localhost:5000/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }) // Send email and password from state
+                body: JSON.stringify({ email, password }),
             });
             const data = await response.json();
             if (response.ok) {
                 localStorage.setItem('token', data.token);
-                localStorage.setItem('userName', data.userName); //update user's name
-                localStorage.setItem('userId', data.userId); //update user's id
-                console.log(userName)
-                console.log(localStorage.getItem('userId'))
-                setLoginStatus('Login successful!'); // Update loginStatus on success
+                localStorage.setItem('userName', data.userName);
+                localStorage.setItem('userId', data.userId);
 
-                // Optionally navigate to the user dashboard or main app here
+                setLoginStatus('Login successful!');
                 setTimeout(() => {
-                navigate('/'); // Replace with your homepage route
+                    navigate('/');
                 }, 1000);
             } else {
                 setLoginStatus('Login failed. Please check your credentials.');
             }
         } catch (error) {
             console.error('Error:', error);
-            setLoginStatus('An error occurred. Please try again later.'); // Update loginStatus on error
+            setLoginStatus('An error occurred. Please try again later.');
         }
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <button type="submit">Login</button>
+        <div className="login-form container">
+            <h2 className="text-center mb-4">Log In</h2>
+            <form onSubmit={handleSubmit} className="card p-4 shadow">
+                <div className="mb-3">
+                    <label htmlFor="email" className="form-label">Email</label>
+                    <input
+                        type="email"
+                        className="form-control"
+                        id="email"
+                        placeholder="Enter your email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="password" className="form-label">Password</label>
+                    <input
+                        type="password"
+                        className="form-control"
+                        id="password"
+                        placeholder="Enter your password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
+                <button type="submit" className="btn btn-primary w-100">Login</button>
+                {loginStatus && (
+                    <div
+                        className={`mt-3 text-center ${
+                            loginStatus.includes('successful') ? 'text-success' : 'text-danger'
+                        }`}
+                    >
+                        {loginStatus}
+                    </div>
+                )}
             </form>
-            {/* Conditionally render the login status message */}
-            {loginStatus && (
-                <p style={{ color: loginStatus.includes('successful') ? 'green' : 'red' }}>
-                    {loginStatus}
-                </p>
-            )}
         </div>
     );
 };

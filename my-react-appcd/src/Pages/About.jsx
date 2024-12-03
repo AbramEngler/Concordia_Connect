@@ -15,7 +15,7 @@ const About = () => {
 					This is our about page for ConcordiaConnect
 				</p>
 				<p>
-					We want to be able to post messages next
+					We want to work on bettering the user experience
 				</p>
 			</div>
 		</div>

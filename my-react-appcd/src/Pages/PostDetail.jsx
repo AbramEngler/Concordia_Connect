@@ -31,7 +31,7 @@ const PostDetail = () => {
     const handleReplySubmit = async (e) => {
         e.preventDefault();
         
-        const authorId = localStorage.getItem('userId'); // Assuming you have stored the user's ID in localStorage
+        const authorId = localStorage.getItem('userId'); 
         const authorName = localStorage.getItem('userName');
 
         if (!authorId || !authorName) {

@@ -84,25 +84,7 @@ app.post('/newuser', async (req, res) => //accepting post requests. Takes an HTT
     }
 }) 
 
-// app.post('/newuser', async (req, res) => {
-//     try {
-//         const { name, email, password } = req.body;
 
-//         if (!name || !email || !password) {
-//             return res.status(400).json({ error: 'Invalid inputs' });
-//         }
-
-//         const saltRounds = 10;
-//         const hashedPassword = await bcrypt.hash(password, saltRounds);
-    
-//         const user = new User({ name, email, password: hashedPassword });
-
-//         await user.save();
-//         res.json({ message: 'User created successfully' });
-//     } catch (err) {
-//         res.status(500).json({ error: err.message });
-//     }
-// });
 
 //Login
 app.post('/login', async (req, res) => {
@@ -119,7 +101,7 @@ app.post('/login', async (req, res) => {
         // const hashInputPassword = await bcrypt.hash(password, saltRounds);
         // console.log(hashInputPassword);
         //const isPasswordValid = bcrypt.compare(password, user.password); //removed "await", made login successful
-        if (password != user.password) return res.status(400).send( //wrote our own conditional to check if input password and stored password is the same
+        if (password != user.password) return res.status(400).send( //wrote  conditional to check if input password and stored password is the same
             { message: 'Invalid password',
                 password: password,
                 crypted: user.password
@@ -371,42 +353,3 @@ app.get('/message/:messageId', async (req, res) => {
     }
 });
 
-// //Fetch user profile
-// app.get('/users/:id', async (req, res) => {
-//     try {
-//         const user = await User.findById(req.params.id).select('name email bio schoolYear');
-//         if (!user) return res.status(404).json({ error: 'User not found' });
-//         res.json(user);
-//     } catch (err) {
-//         res.status(500).json({ error: err.message });
-//     }
-// });
-
-// //Update user profile
-// app.put('/users/:id', async (req, res) => {
-//     const { bio, schoolYear } = req.body;
-//     try {
-//         const user = await User.findByIdAndUpdate(
-//             req.params.id,
-//             { bio, schoolYear },
-//             { new: true }
-//         ).select('name email bio schoolYear');
-//         if (!user) return res.status(404).json({ error: 'User not found' });
-//         res.json(user);
-//     } catch (err) {
-//         res.status(500).json({ error: err.message });
-//     }
-// });
-
-// //Fetch all users for directory
-// app.get('/users', async (req, res) => {
-//     const query = req.query.search || '';
-//     try {
-//         const users = await User.find({
-//             name: { $regex: query, $options: 'i' }
-//         }).sort('name').select('_id name email');
-//         res.json(users);
-//     } catch (err) {
-//         res.status(500).json({ error: err.message });
-//     }
-// });

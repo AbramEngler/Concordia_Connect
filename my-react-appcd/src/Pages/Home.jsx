@@ -1,53 +1,51 @@
 import { Link } from 'react-router-dom';
+import './Home.css';
 
 const Home = () => {
-  const userName = localStorage.getItem('userName') || '';
+    const userName = localStorage.getItem('userName') || '';
 
-  return (
-    <div className="container">
-      <div className="banner-container">
-        <div className="banner">
-          {userName ? (
-            <>
-			<div style={{ marginTop: '40px' }}></div>
-              <h2>Welcome, {userName}!</h2>
-			<div style={{ marginTop: '40px' }}></div>
-              <Link to={`/buyandsell/`}>
-                <h2>Buy&Sell</h2>
-              </Link>
-              <p>Your one-stop shop for all your marketplace needs on campus!</p>
-			  <div style={{ marginTop: '40px' }}></div>
-              <Link to={`/messagepage/`}>
-                <h2>Inbox</h2>
-              </Link>
-              <p>Reach out and connect to other students!</p>
-            </>
-          ) : (
-            <>
-			<div style={{ marginTop: '40px' }}></div>
-              <h2>
-                Welcome, please{' '}
-                <Link to="/login" style={{ textDecoration: 'underline', color: 'blue' }}>
-                  log in
-                </Link>{' '}
-                to get started!
-              </h2>
-			  <div style={{ marginTop: '40px' }}>
-				<h5>
-				New to ConcordiaConnect?{' '}
-                <Link to="/newuser" style={{ textDecoration: 'underline', color: 'blue' }}>
-                  Register
-                </Link>{' '}
-                to get started today!
-				</h5>
-			  	
-              </div>
-            </>
-          )}
+    return (
+        <div className="home-container">
+            <div className="welcome-banner">
+                {userName ? (
+                    <>
+                        <h2>Welcome, {userName}!</h2>
+                        <p className="lead-text">Explore, connect, and make the most of your campus experience.</p>
+                    </>
+                ) : (
+                    <>
+                        <h2>Welcome to ConcordiaConnect!</h2>
+                        <p className="lead-text">Your gateway to connecting with students on campus.</p>
+                    </>
+                )}
+            </div>
+            <div className="action-links">
+                {userName ? (
+                    <>
+                        <Link to="/buyandsell" className="action-card">
+                            <h3>Buy&Sell</h3>
+                            <p>Discover deals or post items for sale—your campus marketplace awaits!</p>
+                        </Link>
+                        <Link to="/messagepage" className="action-card">
+                            <h3>Inbox</h3>
+                            <p>Reach out and connect to other students!</p>
+                        </Link>
+                    </>
+                ) : (
+                    <>
+                        <Link to="/login" className="action-card">
+                            <h3>Log In</h3>
+                            <p>Already have an account? Log in to get started.</p>
+                        </Link>
+                        <Link to="/newuser" className="action-card">
+                            <h3>Register</h3>
+                            <p>New here? Sign up and join the ConcordiaConnect community today.</p>
+                        </Link>
+                    </>
+                )}
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Home;

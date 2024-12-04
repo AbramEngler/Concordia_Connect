@@ -1,0 +1,37 @@
+.about-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9; /* Light background for readability */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Back Button Styling */
+.back-button {
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+/* Header Styling */
+.about-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.about-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #007bff; /* Matches the ConcordiaConnect theme */
+}
+
+/* Content Styling */
+.about-content {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #333;
+}
+
+.about-content p {
+    margin-bottom: 15px;
+}

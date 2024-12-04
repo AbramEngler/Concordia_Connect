@@ -10,7 +10,7 @@ const NavBar = () => {
         // Clear user data from local storage
         localStorage.removeItem('token');
         localStorage.removeItem('userName');
-
+        navigate('/');
         window.location.reload();
         setTimeout(() => {
             navigate('/'); 
@@ -64,7 +64,7 @@ const NavBar = () => {
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <button className="btn btn-outline-danger nav-btn" onClick={handleLogout}>
+                                    <button className="btn btn-outline-danger nav-btn" onClick={handleLogout} to="/">
                                         Logout
                                     </button>
                                 </li>

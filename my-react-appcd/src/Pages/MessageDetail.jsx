@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import './MessageDetail.css';
 
 const MessageDetail = () => {
-    const { messageId } = useParams(); // Get the messageId from the URL
+    const { messageId } = useParams();
     const [message, setMessage] = useState(null);
     const [error, setError] = useState('');
     const [replyBody, setReplyBody] = useState('');
     const [replies, setReplies] = useState([]);
+    const currentUserId = localStorage.getItem('userId');
 
     useEffect(() => {
         const fetchMessage = async () => {
             try {
                 const response = await axios.get(`http://localhost:5000/message/${messageId}`);
                 setMessage(response.data);
-                setReplies(response.data.replies || []); // Initialize replies
+                setReplies(response.data.replies || []);
             } catch (err) {
                 console.error('Error fetching message:', err);
                 setError('Message not found');
@@ -28,20 +30,20 @@ const MessageDetail = () => {
         e.preventDefault();
         try {
             const response = await axios.post(`http://localhost:5000/message/${messageId}/reply`, {
-                senderId: localStorage.getItem('userId'), // Assuming userId is stored in localStorage
-                senderName: localStorage.getItem('userName'), // Assuming userName is stored in localStorage
+                senderId: currentUserId,
+                senderName: localStorage.getItem('userName'),
                 body: replyBody,
             });
-            
-            setReplies((prevReplies) => [...prevReplies, response.data,]); // Update replies list
-            setReplyBody(''); // Clear input field
+
+            setReplies((prevReplies) => [...prevReplies, response.data]);
+            setReplyBody('');
         } catch (err) {
             console.error('Error adding reply:', err);
         }
     };
 
     if (error) {
-        return <p style={{ color: 'red' }}>{error}</p>;
+        return <p className="error">{error}</p>;
     }
 
     if (!message) {
@@ -49,36 +51,46 @@ const MessageDetail = () => {
     }
 
     return (
-        <div>
-            <h2>Message Details</h2>
-            <p><strong>From:</strong> {message.senderName}</p>
-            <p><strong>To:</strong> {message.receiverName}</p>
-            <p><strong>Message:</strong> {message.body}</p>
-            <p><strong>Date:</strong> {new Date(message.createdAt).toLocaleString()}</p>
+        <div className="message-detail-container">
+            <div className="conversation-header">
+                <h2>
+                    {message.senderName} <span className="to-arrow"> to </span> {message.receiverName}
+                </h2>
+            </div>
+            <div className="conversation-body">
+                <div
+                    className={`chat-bubble ${
+                        message.senderId === currentUserId ? 'sender-bubble' : 'receiver-bubble'
+                    }`}
+                >
+                    <p>{message.body}</p>
+                    <span className="chat-timestamp">
+                        {new Date(message.createdAt).toLocaleString()}
+                    </span>
+                </div>
+                {replies.map((reply, index) => (
+                    <div
+                        key={index}
+                        className={`chat-bubble ${
+                            reply.senderId === currentUserId ? 'sender-bubble' : 'receiver-bubble'
+                        }`}
+                    >
+                        <p>{reply.body}</p>
+                        <span className="chat-timestamp">
+                            {reply.senderName} • {new Date(reply.createdAt).toLocaleString()}
+                        </span>
+                    </div>
+                ))}
+            </div>
 
-            <hr />
-            <h3>Replies</h3>
-            {replies.length === 0 ? (
-                <p>No replies yet.</p>
-            ) : (
-                <ul>
-                    {replies.map((reply, index) => (
-                        <li key={index}>
-                            <p><strong>{reply.senderName}:</strong> {reply.body}</p>
-                            <p><em>{new Date(reply.createdAt).toLocaleString()}</em></p>
-                        </li>
-                    ))}
-                </ul>
-            )}
-
-            <form onSubmit={handleReplySubmit}>
+            <form onSubmit={handleReplySubmit} className="reply-form">
                 <textarea
                     placeholder="Write your reply..."
                     value={replyBody}
                     onChange={(e) => setReplyBody(e.target.value)}
                     required
                 />
-                <button type="submit">Reply</button>
+                <button type="submit" className="reply-button">Reply</button>
             </form>
         </div>
     );

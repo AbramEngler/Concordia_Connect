@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import './MessagePage.css';
 
 const MessagePage = ({ userId }) => {
     const [messageContent, setMessageContent] = useState('');
@@ -10,11 +11,10 @@ const MessagePage = ({ userId }) => {
     const [selectedUser, setSelectedUser] = useState(null);
     const [error, setError] = useState('');
 
-    // Fetch messages for the logged-in user
     useEffect(() => {
         const fetchMessages = async () => {
             try {
-                const userId = localStorage.getItem('userId'); // Get the logged-in user's ID
+                const userId = localStorage.getItem('userId');
                 const response = await axios.get(`http://localhost:5000/messages/${userId}`);
                 setMessages(response.data);
             } catch (err) {
@@ -25,7 +25,6 @@ const MessagePage = ({ userId }) => {
         if (userId) fetchMessages();
     }, [userId]);
 
-    // Handle user search
     const handleSearch = async (e) => {
         const query = e.target.value;
         setSearchQuery(query);
@@ -42,7 +41,6 @@ const MessagePage = ({ userId }) => {
         }
     };
 
-    // Handle message send
     const handleSendMessage = async (e) => {
         e.preventDefault();
 
@@ -51,7 +49,7 @@ const MessagePage = ({ userId }) => {
             return;
         }
 
-        const senderName = localStorage.getItem('userName'); // Assuming this is saved during login
+        const senderName = localStorage.getItem('userName');
 
         try {
             const response = await axios.post('http://localhost:5000/message', {
@@ -62,17 +60,16 @@ const MessagePage = ({ userId }) => {
                 body: messageContent,
             });
 
-            setMessages([...messages, response.data]); // Add the new message to the list
-            setMessageContent(''); // Clear the message input
-            setSelectedUser(null); // Clear selected recipient
-            setSearchQuery(''); // Clear search bar
-            setSuggestedUsers([]); // Clear suggestions
+            setMessages([...messages, response.data]);
+            setMessageContent('');
+            setSelectedUser(null);
+            setSearchQuery('');
+            setSuggestedUsers([]);
         } catch (err) {
             setError('Error sending message');
         }
     };
 
-    // Handle message delete (user-specific)
     const handleDeleteMessage = async (messageId) => {
         try {
             const userId = localStorage.getItem('userId');
@@ -80,7 +77,6 @@ const MessagePage = ({ userId }) => {
                 data: { userId },
             });
 
-            // Update the messages list to reflect the deletion
             setMessages(messages.filter((message) => message._id !== messageId));
         } catch (err) {
             setError('Error deleting message.');
@@ -88,48 +84,59 @@ const MessagePage = ({ userId }) => {
     };
 
     return (
-        <div>
-            <h2>Messages</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <div>
-                {messages.map((message, index) => (
-                    <div key={index}>
-                        <Link to={`/message/${message._id}`}>
-                            <p>
-                                <strong>{message.senderName}</strong> to <strong>{message.receiverName}</strong>
+        <div className="message-page-container">
+            <h2 className="page-title">Messages</h2>
+            {error && <p className="error-message">{error}</p>}
+
+            <div className="message-list">
+                {messages.map((message) => (
+                    <div key={message._id} className="message-card">
+                        <Link to={`/message/${message._id}`} className="message-link">
+                            <div className="message-header">
+                                <strong>{message.senderName} </strong>  to    <strong> {message.receiverName}</strong>
+                                <span className="message-date">
+                                    {new Date(message.createdAt).toLocaleString()}
+                                </span>
+                            </div>
+                            <p className="message-body">
+                                {message.body.length > 80
+                                    ? `${message.body.substring(0, 80)}...`
+                                    : message.body}
                             </p>
+                            <div className="message-meta">
+                                <span>{message.replies?.length || 0} replies</span> |{' '}
+                                <span>Status: {message.status}</span>
+                            </div>
                         </Link>
-                        <p>{message.body}</p>
-                        <p><strong>Replies:</strong> {message.replies?.length || 0} replies</p>
-                        <p>Status: {message.status}</p>
-                        <p>Date: {new Date(message.createdAt).toLocaleString()}</p>
                         <button
                             onClick={() => handleDeleteMessage(message._id)}
-                            style={{ color: 'red', cursor: 'pointer' }}
+                            className="delete-button"
                         >
                             Delete
                         </button>
                     </div>
                 ))}
             </div>
-            <form onSubmit={handleSendMessage}>
+
+            <form className="message-form" onSubmit={handleSendMessage}>
                 <input
                     type="text"
                     value={searchQuery}
                     onChange={handleSearch}
                     placeholder="Search for a user"
+                    className="search-input"
                 />
                 {suggestedUsers.length > 0 && (
-                    <ul>
+                    <ul className="suggested-users-list">
                         {suggestedUsers.map((user) => (
                             <li
                                 key={user._id}
                                 onClick={() => {
                                     setSelectedUser(user);
-                                    setSearchQuery(user.name); // Show selected user's name in the search bar
-                                    setSuggestedUsers([]); // Clear suggestions
+                                    setSearchQuery(user.name);
+                                    setSuggestedUsers([]);
                                 }}
-                                style={{ cursor: 'pointer', listStyle: 'none', padding: '5px' }}
+                                className="suggested-user"
                             >
                                 {user.name}
                             </li>
@@ -137,17 +144,18 @@ const MessagePage = ({ userId }) => {
                     </ul>
                 )}
                 {selectedUser && (
-                    <p>
+                    <p className="selected-user">
                         Sending message to: <strong>{selectedUser.name}</strong>
                     </p>
                 )}
                 <textarea
                     value={messageContent}
                     onChange={(e) => setMessageContent(e.target.value)}
-                    placeholder="Type your message here"
+                    placeholder="Type your message here..."
                     required
+                    className="message-textarea"
                 />
-                <button type="submit" disabled={!selectedUser}>
+                <button type="submit" className="send-button" disabled={!selectedUser}>
                     Send
                 </button>
             </form>

@@ -1,0 +1,128 @@
+/* Container */
+.post-detail-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Back Button */
+.btn-back {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    font-size: 1rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-back:hover {
+    background-color: #0056b3;
+}
+
+/* Post Card */
+.post-card {
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.post-card h1 {
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+    color: #007bff;
+}
+
+.post-body {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.post-meta {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Replies Section */
+.replies-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.reply-card {
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reply-body {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.reply-meta {
+    font-size: 0.85rem;
+    color: #555;
+}
+
+/* No Replies Message */
+.no-replies {
+    font-size: 1rem;
+    color: #777;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Reply Form */
+.reply-form h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.reply-form textarea {
+    width: 100%;
+    min-height: 80px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.btn-submit {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: #0056b3;
+}
+
+/* Error Message */
+.error-message {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}   

@@ -1,7 +1,10 @@
 /* General styling for the navbar */
 .navbar {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(21, 1, 242, 0.217);
+    color:#007bff;
 }
+
+
 
 .brand-title {
     font-size: 1.5rem;

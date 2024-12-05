@@ -55,7 +55,7 @@ const NavBar = () => {
                                 </li>
                                 <li className="nav-item">
                                     <NavLink className="nav-link" to="/messagepage">
-                                        Inbox
+                                        Messages
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">

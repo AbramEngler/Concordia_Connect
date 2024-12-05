@@ -85,6 +85,7 @@ const MessagePage = ({ userId }) => {
 
     return (
         <div className="message-page-container">
+            
             <h2 className="page-title">Messages</h2>
             {error && <p className="error-message">{error}</p>}
 
@@ -117,6 +118,10 @@ const MessagePage = ({ userId }) => {
                     </div>
                 ))}
             </div>
+                <br></br>
+                
+                    <h2 className="create-new-message-title">Compose New Message Below</h2>
+            
 
             <form className="message-form" onSubmit={handleSendMessage}>
                 <input

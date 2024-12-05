@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+//import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './MessageDetail.css';
 
@@ -10,6 +11,7 @@ const MessageDetail = () => {
     const [replyBody, setReplyBody] = useState('');
     const [replies, setReplies] = useState([]);
     const currentUserId = localStorage.getItem('userId');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchMessage = async () => {
@@ -52,6 +54,7 @@ const MessageDetail = () => {
 
     return (
         <div className="message-detail-container">
+            <button className="btn-back" onClick={() => navigate(-1)}>Go Back</button>
             <div className="conversation-header">
                 <h2>
                     {message.senderName} <span className="to-arrow"> to </span> {message.receiverName}

@@ -27,7 +27,7 @@ const Home = () => {
                             <p>Discover deals or post items for sale—your campus marketplace awaits!</p>
                         </Link>
                         <Link to="/messagepage" className="action-card">
-                            <h3>Inbox</h3>
+                            <h3>Messages</h3>
                             <p>Reach out and connect to other students!</p>
                         </Link>
                     </>

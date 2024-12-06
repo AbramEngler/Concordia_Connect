@@ -19,7 +19,7 @@ const About = () => {
                 </p>
                 <p>
                     Our mission is to enhance the student experience by offering tools that foster meaningful connections, 
-                    whether through the <em>Buy&Sell</em> marketplace or private messaging with other students.
+                    whether through the <em>Buy&Sell</em> marketplace or direct messaging with other students.
                 </p>
                 <p>
                     We are constantly working on improving our platform to make it beneficial for everyone in the Concordia community.
